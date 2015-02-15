@@ -2,3 +2,4 @@ C:\Users\Chris Powell\Documents\Visual Studio 2013\Projects\WindowsFormsApplicat
 C:\Users\Chris Powell\Documents\Visual Studio 2013\Projects\WindowsFormsApplication3\WindowsFormsApplication3\bin\Debug\DLLs\InjectDLL.pdb
 C:\Users\Chris Powell\Documents\Visual Studio 2013\Projects\WindowsFormsApplication3\ClassLibrary1\obj\Debug\InjectDLL.dll
 C:\Users\Chris Powell\Documents\Visual Studio 2013\Projects\WindowsFormsApplication3\ClassLibrary1\obj\Debug\InjectDLL.pdb
+C:\Users\Chris Powell\Documents\Visual Studio 2013\Projects\WindowsFormsApplication3\ClassLibrary1\obj\Debug\InjectedDLL.csprojResolveAssemblyReference.cache

@@ -6,19 +6,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Security;
+using System.Diagnostics;
 
 namespace InjectedDLL
 {
+    
     public class InjectDLL
     {
 
-        public bool DLLMain()
+        static InjectDLL()
         {
+            System.IO.File.WriteAllText("DLLlog.txt", "Int DLL Injection" + Environment.NewLine);
             // Find the target window handle.
             IntPtr hTargetWnd = NativeMethod.FindWindow(null, "Injector");
             if (hTargetWnd == IntPtr.Zero)
             {
-                System.IO.File.WriteAllText(@"DLLlog.txt", "Unable to find the Injector window");
+                System.IO.File.WriteAllText("DLLlog.txt", "Unable to find the Injector window" + Environment.NewLine);
             }
 
             // Prepare the COPYDATASTRUCT struct with the data to be sent.
@@ -41,20 +44,20 @@ namespace InjectedDLL
                 // Send the COPYDATASTRUCT struct through the WM_COPYDATA message to 
                 // the receiving window. (The application must use SendMessage, 
                 // instead of PostMessage to send WM_COPYDATA because the receiving 
-                // application must accept while it is guaranteed to be valid.)                
-                NativeMethod.SendMessage(hTargetWnd, WM_COPYDATA, hTargetWnd, ref cds);
+                // application must accept while it is guaranteed to be valid.)          
+                
+                NativeMethod.SendMessage(hTargetWnd, WM_COPYDATA, Process.GetCurrentProcess().Handle, ref cds);
 
                 int result = Marshal.GetLastWin32Error();
                 if (result != 0)
                 {
-                    System.IO.File.WriteAllText(@"DLLlog.txt", "SendMessage(WM_COPYDATA) failed w/err 0x{0:" + result.ToString() + "}");
+                    System.IO.File.WriteAllText("DLLlog.txt", "SendMessage(WM_COPYDATA) failed w/err 0x{0:" + result.ToString() + "}" + Environment.NewLine);
                 }
             }
             finally
             {
                 Marshal.FreeHGlobal(pMyStruct);
-            }
-            return true;
+            }       
         }
 
 

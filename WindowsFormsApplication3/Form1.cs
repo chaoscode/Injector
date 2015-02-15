@@ -53,21 +53,10 @@ namespace WindowsFormsApplication3
         }
 
         private void ProcessList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            string spliter = ProcessList.Text;
-            int postion = spliter.IndexOf("-");
-            ProcessIDBox.Text = spliter.Remove(0, postion + 2);
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            FillDLLList();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
+        {                                                                                                     
             injector injectdll = new injector();
             injectdll.InjectByProcessID(DLLListBox.Text,Convert.ToInt32(ProcessIDBox.Text));
+            OutPut.AppendText("Injected " + DLLListBox.Text + Environment.NewLine + "ID: " + ProcessIDBox.Text);
         }
 
         protected override void WndProc(ref Message m)
