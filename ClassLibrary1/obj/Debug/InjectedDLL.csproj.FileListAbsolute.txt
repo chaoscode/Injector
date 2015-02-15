@@ -1,0 +1,4 @@
+C:\Users\Chris Powell\Documents\Visual Studio 2013\Projects\WindowsFormsApplication3\WindowsFormsApplication3\bin\Debug\DLLs\InjectDLL.dll
+C:\Users\Chris Powell\Documents\Visual Studio 2013\Projects\WindowsFormsApplication3\WindowsFormsApplication3\bin\Debug\DLLs\InjectDLL.pdb
+C:\Users\Chris Powell\Documents\Visual Studio 2013\Projects\WindowsFormsApplication3\ClassLibrary1\obj\Debug\InjectDLL.dll
+C:\Users\Chris Powell\Documents\Visual Studio 2013\Projects\WindowsFormsApplication3\ClassLibrary1\obj\Debug\InjectDLL.pdb
