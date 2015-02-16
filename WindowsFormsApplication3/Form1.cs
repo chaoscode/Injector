@@ -13,9 +13,9 @@ using System.Runtime.InteropServices;
 
 namespace WindowsFormsApplication3
 {
-    public partial class Form1 : Form
+    public partial class Injector : Form
     {
-        public Form1()
+        public Injector()
         {
             InitializeComponent();
         }

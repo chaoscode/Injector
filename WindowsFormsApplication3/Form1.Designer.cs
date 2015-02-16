@@ -1,6 +1,6 @@
 ﻿namespace WindowsFormsApplication3
 {
-    partial class Form1
+    partial class Injector
     {
         /// <summary>
         /// Required designer variable.
@@ -119,7 +119,7 @@
             this.label2.TabIndex = 8;
             this.label2.Text = "DLL List";
             // 
-            // Form1
+            // Injector
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -133,8 +133,8 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.DLLListBox);
             this.Controls.Add(this.ProcessList);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Injector";
+            this.Text = "Injector";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
