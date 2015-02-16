@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowsFormsApplication3", "WindowsFormsApplication3\WindowsFormsApplication3.csproj", "{ADAC9A12-5D6B-453C-ABF4-2C19986CDCD7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Injetor", "WindowsFormsApplication3\Injetor.csproj", "{ADAC9A12-5D6B-453C-ABF4-2C19986CDCD7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{3CA7FB37-4985-44C6-A62A-9A20B9A4B356} = {3CA7FB37-4985-44C6-A62A-9A20B9A4B356}
 	EndProjectSection

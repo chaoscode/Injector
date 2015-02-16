@@ -37,7 +37,7 @@ namespace InjectedDLL
             switch (fdwReason)
             {
                 case Reason.DLL_PROCESS_ATTACH:
-                    DisableThreadLibraryCalls(hinstDLL);
+                    //DisableThreadLibraryCalls(hinstDLL);
                     Initialize();
                     break;
                 
@@ -59,12 +59,17 @@ namespace InjectedDLL
 
         private static void DoWork()
         {
-            System.IO.File.WriteAllText("DLLlog.txt", "Int DLL Injection" + Environment.NewLine);
+                System.IO.File.WriteAllText("DLLlog.txt", "Int DLL Injection" + Environment.NewLine);
                 // Find the target window handle.
                 IntPtr hTargetWnd = NativeMethod.FindWindow(null, "Injector");
                 if (hTargetWnd == IntPtr.Zero)
                 {
-                    System.IO.File.WriteAllText("DLLlog.txt", "Unable to find the Injector window" + Environment.NewLine);
+                    hTargetWnd = NativeMethod.FindWindow(null, "Injector.vshost");
+                }
+
+                if (hTargetWnd == IntPtr.Zero)
+                {
+                   System.IO.File.WriteAllText("DLLlog.txt", "Unable to find the Injector window" + Environment.NewLine);
                 }
 
                 // Prepare the COPYDATASTRUCT struct with the data to be sent.

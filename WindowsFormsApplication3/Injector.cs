@@ -75,6 +75,8 @@ namespace WindowsFormsApplication3
             Int32 milliseconds
             );
 
+        int PROCESS_ALL_ACCESS = (0x1F0FFF);
+
         public Int32 GetProcessId(String proc)
         {
             Process[] ProcList;
@@ -143,11 +145,11 @@ namespace WindowsFormsApplication3
 
         public void InjectByProcessName(string dllname, string processname)
         {
+            Process[] handle = Process.GetProcessesByName(processname);
 
-            Int32 ProcID = GetProcessId(processname);
-            if (ProcID >= 0)
+            if (handle[0].Id >= 0)
             {
-                IntPtr hProcess = (IntPtr)OpenProcess(0x1F0FFF, 1, ProcID);
+                IntPtr hProcess = (IntPtr)OpenProcess(Convert.ToUInt32(PROCESS_ALL_ACCESS), 1, handle[0].Id);
                 if (hProcess == null)
                 {
                     //MessageBox.Show("OpenProcess() Failed!");
@@ -161,10 +163,12 @@ namespace WindowsFormsApplication3
         public void InjectByProcessID(string dllname, Int32 processID)
         {
 
-            Int32 ProcID = processID;
-            if (ProcID >= 0)
+            Process handle = Process.GetProcessById(Convert.ToInt32(processID));
+
+
+            if (handle.Id >= 0)
             {
-                IntPtr hProcess = (IntPtr)OpenProcess(0x1F0FFF, 1, ProcID);
+                IntPtr hProcess = (IntPtr)OpenProcess(Convert.ToUInt32(PROCESS_ALL_ACCESS), 1, handle.Id);
                 if (hProcess == null)
                 {
                     //MessageBox.Show("OpenProcess() Failed!");
