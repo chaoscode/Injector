@@ -7,59 +7,101 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Diagnostics;
+using RGiesecke.DllExport;
 
 namespace InjectedDLL
-{
-    
+{    
     public class InjectDLL
     {
-
-        static InjectDLL()
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [PreserveSig]
+        static extern bool DisableThreadLibraryCalls
+        (
+            [In] IntPtr hModule
+        );
+ 
+        public enum Reason
         {
-            System.IO.File.WriteAllText("DLLlog.txt", "Int DLL Injection" + Environment.NewLine);
-            // Find the target window handle.
-            IntPtr hTargetWnd = NativeMethod.FindWindow(null, "Injector");
-            if (hTargetWnd == IntPtr.Zero)
+            DLL_PROCESS_ATTACH = 1,
+            DLL_PROCESS_DETACH = 0,
+            DLL_THREAD_ATTACH = 2,
+            DLL_THREAD_DETACH = 3
+        }
+ 
+        [DllExport]
+        public static bool DllMain(
+            [In] IntPtr hinstDLL,
+            [In] Reason fdwReason,
+            [In] IntPtr lpvReserved)
+        {
+            switch (fdwReason)
             {
-                System.IO.File.WriteAllText("DLLlog.txt", "Unable to find the Injector window" + Environment.NewLine);
-            }
-
-            // Prepare the COPYDATASTRUCT struct with the data to be sent.
-            MyStruct myStruct;
-
-            myStruct.Number = 1;
-            myStruct.Message = "Send Data Example";
-
-            // Marshal the managed struct to a native block of memory.
-            int myStructSize = Marshal.SizeOf(myStruct);
-            IntPtr pMyStruct = Marshal.AllocHGlobal(myStructSize);
-            try
-            {
-                Marshal.StructureToPtr(myStruct, pMyStruct, true);
-
-                COPYDATASTRUCT cds = new COPYDATASTRUCT();
-                cds.cbData = myStructSize;
-                cds.lpData = pMyStruct;
-
-                // Send the COPYDATASTRUCT struct through the WM_COPYDATA message to 
-                // the receiving window. (The application must use SendMessage, 
-                // instead of PostMessage to send WM_COPYDATA because the receiving 
-                // application must accept while it is guaranteed to be valid.)          
+                case Reason.DLL_PROCESS_ATTACH:
+                    DisableThreadLibraryCalls(hinstDLL);
+                    Initialize();
+                    break;
                 
-                NativeMethod.SendMessage(hTargetWnd, WM_COPYDATA, Process.GetCurrentProcess().Handle, ref cds);
-
-                int result = Marshal.GetLastWin32Error();
-                if (result != 0)
-                {
-                    System.IO.File.WriteAllText("DLLlog.txt", "SendMessage(WM_COPYDATA) failed w/err 0x{0:" + result.ToString() + "}" + Environment.NewLine);
-                }
+                case Reason.DLL_PROCESS_DETACH:
+                    Terminate();
+                    break;
             }
-            finally
-            {
-                Marshal.FreeHGlobal(pMyStruct);
-            }       
+            return true;
+        }
+ 
+        private static void Terminate()
+        {
+        }
+ 
+        private static void Initialize()
+        {
+            DoWork();
         }
 
+        private static void DoWork()
+        {
+            System.IO.File.WriteAllText("DLLlog.txt", "Int DLL Injection" + Environment.NewLine);
+                // Find the target window handle.
+                IntPtr hTargetWnd = NativeMethod.FindWindow(null, "Injector");
+                if (hTargetWnd == IntPtr.Zero)
+                {
+                    System.IO.File.WriteAllText("DLLlog.txt", "Unable to find the Injector window" + Environment.NewLine);
+                }
+
+                // Prepare the COPYDATASTRUCT struct with the data to be sent.
+                MyStruct myStruct;
+
+                myStruct.Number = 1;
+                myStruct.Message = "Send Data Example";
+
+                // Marshal the managed struct to a native block of memory.
+                int myStructSize = Marshal.SizeOf(myStruct);
+                IntPtr pMyStruct = Marshal.AllocHGlobal(myStructSize);
+                try
+                {
+                    Marshal.StructureToPtr(myStruct, pMyStruct, true);
+
+                    COPYDATASTRUCT cds = new COPYDATASTRUCT();
+                    cds.cbData = myStructSize;
+                    cds.lpData = pMyStruct;
+
+                    // Send the COPYDATASTRUCT struct through the WM_COPYDATA message to 
+                    // the receiving window. (The application must use SendMessage, 
+                    // instead of PostMessage to send WM_COPYDATA because the receiving 
+                    // application must accept while it is guaranteed to be valid.)          
+                
+                    NativeMethod.SendMessage(hTargetWnd, WM_COPYDATA, Process.GetCurrentProcess().Handle, ref cds);
+
+                    int result = Marshal.GetLastWin32Error();
+                    if (result != 0)
+                    {
+                        System.IO.File.WriteAllText("DLLlog.txt", "SendMessage(WM_COPYDATA) failed w/err 0x{0:" + result.ToString() + "}" + Environment.NewLine);
+                    }
+                }
+                finally
+                {
+                    Marshal.FreeHGlobal(pMyStruct);
+                }
+        }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         internal struct MyStruct
@@ -133,7 +175,7 @@ namespace InjectedDLL
             public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
         }
 
-        #endregion
+        #endregion    
     }
 }
 

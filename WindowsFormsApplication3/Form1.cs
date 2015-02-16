@@ -22,7 +22,7 @@ namespace WindowsFormsApplication3
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            if(!Directory.Exists("DLLs"))
+            if (!Directory.Exists("DLLs"))
             {
                 Directory.CreateDirectory("DLLs");
             }
@@ -34,8 +34,9 @@ namespace WindowsFormsApplication3
         {
             ProcessList.Items.Clear();
             Process[] processlist = Process.GetProcesses();
-            foreach(Process theprocess in processlist){
-                ProcessList.Items.Add(theprocess.ProcessName + " - " + theprocess.Id.ToString());                
+            foreach (Process theprocess in processlist)
+            {
+                ProcessList.Items.Add(theprocess.ProcessName + " - " + theprocess.Id.ToString());
             }
         }
 
@@ -45,18 +46,6 @@ namespace WindowsFormsApplication3
                 .EnumerateFiles("DLLs", "*.dll", SearchOption.AllDirectories)
                 .Select(Path.GetFullPath); // <-- note you can shorten the lambda
             DLLListBox.DataSource = fileList.ToList();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            FillProcessList();
-        }
-
-        private void ProcessList_SelectedIndexChanged(object sender, EventArgs e)
-        {                                                                                                     
-            injector injectdll = new injector();
-            injectdll.InjectByProcessID(DLLListBox.Text,Convert.ToInt32(ProcessIDBox.Text));
-            OutPut.AppendText("Injected " + DLLListBox.Text + Environment.NewLine + "ID: " + ProcessIDBox.Text);
         }
 
         protected override void WndProc(ref Message m)
@@ -75,7 +64,7 @@ namespace WindowsFormsApplication3
                         typeof(MyStruct));
 
                     // Display the MyStruct data members. 
-                    OutPut.AppendText("Number: " + myStruct.Number.ToString() + Environment.NewLine + "Message: " + myStruct.Message);                   
+                    OutPut.AppendText("Number: " + myStruct.Number.ToString() + Environment.NewLine + "Message: " + myStruct.Message);
                 }
             }
 
@@ -116,9 +105,28 @@ namespace WindowsFormsApplication3
 
         #endregion 
 
-        private void OutPut_TextChanged(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
+            FillProcessList();
+        }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            injector injectdll = new injector();
+            injectdll.InjectByProcessID(DLLListBox.Text, Convert.ToInt32(ProcessIDBox.Text));
+            OutPut.AppendText("Injected " + DLLListBox.Text + Environment.NewLine + "ID: " + ProcessIDBox.Text);
+        }
+
+        private void ProcessList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string spliter = ProcessList.Text;
+            int postion = spliter.IndexOf("-");
+            ProcessIDBox.Text = spliter.Remove(0, postion + 2);
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FillDLLList();
         }
     }
 }
